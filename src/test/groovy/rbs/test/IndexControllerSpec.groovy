@@ -9,14 +9,33 @@ import spock.lang.Specification
 @TestFor(IndexController)
 class IndexControllerSpec extends Specification {
 
-    def setup() {
+    void "test index controller too small number"() {
+        when:
+        params.number = '0'
+        controller.index()
+
+        then:
+        response.status == 500
+        response.text == "{\"response\":{\"ERROR\":{\"code\":500,\"msg\":\"Number is too small.\"}}}"
     }
 
-    def cleanup() {
+    void "test index controller not a number"() {
+        when:
+        params.number = 'p'
+        controller.index()
+
+        then:
+        response.status == 500
+        response.text == "{\"response\":{\"ERROR\":{\"code\":500,\"msg\":\"Param is not a number.\"}}}"
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
+    void "test index calculate primes"() {
+        when:
+        params.number = '10'
+        controller.index()
+
+        then:
+        response.status == 200
+        response.text == "{\"response\":{\"SUCCESS\":{\"code\":200,\"initial\":\"10\",\"primes\":[2,3,5,7]}}}"
     }
 }
