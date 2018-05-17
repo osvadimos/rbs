@@ -14,9 +14,15 @@ class IndexController {
         } else if (Integer.valueOf(number) <= 0) {
             return render(status: 500, contentType: "text/json", text: "Number is too small.")
         }
+        String primes
+        if(params.efficient){
+            primes = primeService.calculatePrimesEfficiently(Integer.valueOf(number)).toString()
+        }else{
+            primes = primeService.calculatePrimes(Integer.valueOf(number)).toString()
+        }
         Map<String, String> result = ["initial": number.toString(),
-                                      "primes" : primeService.calculatePrimes(Integer.valueOf(number)).toString()]
-        if(request.getContentType().toString() == "text/xml"){
+                                      "primes" : primes]
+        if(request.getContentType() == "text/xml"){
             return render(contentType: "text/xml", text: result as XML)
         }else{
             return render(contentType: "text/json", text: result as JSON)

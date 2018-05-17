@@ -24,6 +24,15 @@ class PrimeServiceSpec extends Specification {
         primesFor100.size() == testedPrimes.size()
     }
 
+    void "test primes for random integer efficiently"() {
+        List<Integer> primesFor100 = service.calculatePrimesEfficiently(new Random().nextInt(100))
+        List<Integer> testedPrimes = primesFor100.collect {
+            if (isPrime(it)) it
+        }
+        expect: "testing after check"
+        primesFor100.size() == testedPrimes.size()
+    }
+
     static boolean isPrime(int n) {
         for (int i = 2; i < n; i++) {
             if (n % i == 0)
