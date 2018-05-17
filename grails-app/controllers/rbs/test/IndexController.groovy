@@ -1,7 +1,7 @@
 package rbs.test
 
 import grails.converters.JSON
-
+import grails.converters.XML
 
 class IndexController {
 
@@ -16,6 +16,10 @@ class IndexController {
         }
         Map<String, String> result = ["initial": number.toString(),
                                       "primes" : primeService.calculatePrimes(Integer.valueOf(number)).toString()]
-        return render(contentType: "text/json", text: result as JSON)
+        if(request.getContentType().toString() == "text/xml"){
+            return render(contentType: "text/xml", text: result as XML)
+        }else{
+            return render(contentType: "text/json", text: result as JSON)
+        }
     }
 }
