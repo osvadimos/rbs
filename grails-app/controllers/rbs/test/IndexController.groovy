@@ -1,6 +1,10 @@
 package rbs.test
 
+
+
 class IndexController {
+
+    def primeService
 
     def index() {
         String number = params.number.toString()
@@ -12,7 +16,7 @@ class IndexController {
         return render(contentType: "text/json") {
             response SUCCESS: [code    : 200,
                                initial : number,
-                               primes: PrimeService.calculatePrimes(Integer.valueOf(number))]
+                               primes: primeService.calculatePrimes(Integer.valueOf(number))]
         }
     }
 }

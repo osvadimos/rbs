@@ -1,11 +1,21 @@
 package rbs.test
 
-import grails.transaction.Transactional
+import java.util.concurrent.ConcurrentHashMap
 
-@Transactional
 class PrimeService {
 
-    static List<Integer> calculatePrimes(final int number) {
+    private ConcurrentHashMap<Integer, List<Integer>> cacheMap = new ConcurrentHashMap<>()
+
+    /**
+     *
+     * @param int number
+     * @return primes till that number
+     */
+    List<Integer> calculatePrimes(final int number) {
+        if(cacheMap[number]){
+            log.debug "Found primes for number:${number} in cache"
+            return cacheMap[number]
+        }
         List<Integer> primes = []
         (2..number).each { int n ->
             (2..n).each { int d ->
@@ -14,6 +24,8 @@ class PrimeService {
             }
         }
         primes = (1..number) - primes - 1
+        log.debug "Calculated primes for number:${number}"
+        cacheMap.put(number, primes)
         return primes
     }
 }
