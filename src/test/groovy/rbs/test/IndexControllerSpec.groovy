@@ -16,7 +16,7 @@ class IndexControllerSpec extends Specification {
 
         then:
         response.status == 500
-        response.text == "{\"response\":{\"ERROR\":{\"code\":500,\"msg\":\"Number is too small.\"}}}"
+        response.text == "Number is too small."
     }
 
     void "test index controller not a number"() {
@@ -26,16 +26,17 @@ class IndexControllerSpec extends Specification {
 
         then:
         response.status == 500
-        response.text == "{\"response\":{\"ERROR\":{\"code\":500,\"msg\":\"Param is not a number.\"}}}"
+        response.text == "Param is not a number."
     }
 
     void "test index calculate primes"() {
         when:
         params.number = '10'
+        controller.primeService = new PrimeService()
         controller.index()
 
         then:
         response.status == 200
-        response.text == "{\"response\":{\"SUCCESS\":{\"code\":200,\"initial\":\"10\",\"primes\":[2,3,5,7]}}}"
+        response.text == "{\"initial\":\"10\",\"primes\":\"[2, 3, 5, 7]\"}"
     }
 }

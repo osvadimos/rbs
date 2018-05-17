@@ -1,5 +1,6 @@
 package rbs.test
 
+import grails.converters.JSON
 
 
 class IndexController {
@@ -9,14 +10,12 @@ class IndexController {
     def index() {
         String number = params.number.toString()
         if (!number.isNumber()) {
-            return render(status: 500,  contentType: "text/json") { response ERROR: [code: 500, msg: "Param is not a number."]}
+            return render(status: 500, contentType: "text/json", text: "Param is not a number.")
         } else if (Integer.valueOf(number) <= 0) {
-            return render(status: 500, contentType: "text/json") { response ERROR: [code: 500, msg: "Number is too small."] }
+            return render(status: 500, contentType: "text/json", text: "Number is too small.")
         }
-        return render(contentType: "text/json") {
-            response SUCCESS: [code    : 200,
-                               initial : number,
-                               primes: primeService.calculatePrimes(Integer.valueOf(number))]
-        }
+        Map<String, String> result = ["initial": number.toString(),
+                                      "primes" : primeService.calculatePrimes(Integer.valueOf(number)).toString()]
+        return render(contentType: "text/json", text: result as JSON)
     }
 }
